@@ -23,6 +23,9 @@ export default function ProfilePage() {
         {/* Profile header card */}
         <ProfileHeader user={profileUser} />
 
+        {/* Academic summary (Full width) */}
+        <ProfileAcademicSummary />
+
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           {/* Personal info form */}
           <div className="flex flex-col gap-6">
@@ -30,9 +33,6 @@ export default function ProfilePage() {
           </div>
 
           <div className="flex flex-col gap-6">
-            {/* Academic summary */}
-            <ProfileAcademicSummary />
-
             {/* Account settings */}
             <AccountSettingsCard user={profileUser} />
           </div>

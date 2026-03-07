@@ -55,12 +55,12 @@ export function ProfileAcademicSummary() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x lg:divide-y-0 lg:divide-x divide-slate-100">
           {cards.map(({ label, value, sub, icon: Icon, iconColor, iconBg }) => (
             <div key={label} className="flex flex-col gap-3 px-6 py-6 transition-colors hover:bg-slate-50/50">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-4">
                 <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
                   {label}
                 </span>
                 <span
-                  className={`flex h-10 w-10 items-center justify-center rounded-full ${iconBg}`}
+                  className={`flex shrink-0 h-10 w-10 items-center justify-center rounded-full ${iconBg}`}
                 >
                   <Icon
                     className={`h-4 w-4 ${iconColor}`}

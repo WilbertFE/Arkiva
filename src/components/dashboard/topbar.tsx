@@ -10,19 +10,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { currentUser } from "@/lib/data";
 import type { User } from "@/lib/types";
+import Link from "next/link";
+import { Button } from "../ui/button";
+import { signOut } from "next-auth/react";
 
 interface TopbarProps {
   title: string;
   onMenuClick: () => void;
-  user?: User;
+  user: User;
 }
 
 export function Topbar({
   title,
   onMenuClick,
-  user = currentUser,
+  user,
 }: TopbarProps) {
   return (
     <header className="sticky top-0 z-40 flex h-[57px] items-center justify-between border-b border-border bg-card px-4 sm:px-6">
@@ -57,7 +59,7 @@ export function Topbar({
           <DropdownMenuTrigger asChild>
             <button
               className="flex items-center gap-2 rounded-md px-2 py-1.5 transition-colors hover:bg-accent"
-              aria-label={`User menu for ${user.name}`}
+              aria-label={`User menu for ${user.full_name}`}
             >
               <Avatar className="h-[22px] w-[22px]">
                 <AvatarFallback className="bg-primary text-primary-foreground text-[9px] font-bold">
@@ -65,7 +67,7 @@ export function Topbar({
                 </AvatarFallback>
               </Avatar>
               <span className="hidden text-[13px] font-medium text-foreground sm:block">
-                {user.name}
+                {user.full_name}
               </span>
               <ChevronDown
                 className="hidden h-3 w-3 text-muted-foreground sm:block"
@@ -75,21 +77,21 @@ export function Topbar({
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-52 text-[13px]">
             <DropdownMenuLabel className="pb-1">
-              <p className="font-medium text-[13px]">{user.name}</p>
+              <p className="font-medium text-[13px]">{user.full_name}</p>
               <p className="text-[11px] font-normal text-muted-foreground">
                 {user.email}
               </p>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-[13px] cursor-pointer">
-              Profile
+            <DropdownMenuItem asChild className="text-[13px] cursor-pointer">
+              <Link href="/profile">Profile</Link>
             </DropdownMenuItem>
-            <DropdownMenuItem className="text-[13px] cursor-pointer">
-              Settings
+            <DropdownMenuItem asChild className="text-[13px] cursor-pointer">
+              <Link href="/settings">Settings</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="text-[13px] cursor-pointer text-destructive focus:text-destructive">
-              Log out
+              <Button variant="ghost" className="p-0 text-sm cursor-pointer" onClick={() => signOut({ callbackUrl: "/signin" })}>Logout</Button>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

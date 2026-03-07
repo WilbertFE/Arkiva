@@ -51,8 +51,11 @@ export interface NavItem {
 }
 
 export interface User {
-  name: string;
+  full_name: string;
   email: string;
+  username: string;
+  role: string;
+
   initials: string;
 }
 
@@ -78,6 +81,7 @@ export interface DetailedSemester {
 }
 
 export interface ProfileUser extends User {
+  name?: string;
   fullName: string;
   studentId: string;
   school: string;

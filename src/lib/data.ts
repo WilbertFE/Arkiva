@@ -9,9 +9,11 @@ import type {
 // ─── Student ──────────────────────────────────────────────────────────────────
 
 export const currentUser: User = {
-  name: "Wilbert",
+  full_name: "Wilbert",
   email: "wilbert@student.com",
   initials: "WI",
+  username: "",
+  role: ""
 };
 
 export const profileUser: ProfileUser = {
@@ -24,6 +26,9 @@ export const profileUser: ProfileUser = {
   gradeClass: "XII Science 1",
   emailVerified: true,
   accountCreated: "January 12, 2024",
+  full_name: "",
+  username: "",
+  role: ""
 };
 
 // ─── Semesters ────────────────────────────────────────────────────────────────
