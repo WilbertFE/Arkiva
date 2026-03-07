@@ -37,7 +37,7 @@ const NAV_SECTIONS: { heading: string; items: NavItem[] }[] = [
     items: [
       { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
       { label: "My Grades", href: "/my-grades", icon: BookOpen },
-      { label: "Analytics", href: "#", icon: BarChart2 },
+      { label: "Analytics", href: "/analytics", icon: BarChart2 },
     ],
   },
   {
