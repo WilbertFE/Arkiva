@@ -23,7 +23,7 @@ export function HomeHowItWorks() {
   ];
 
   return (
-    <section className="py-24 bg-white sm:py-32 overflow-hidden">
+    <section id="how-it-works" className="py-24 bg-white sm:py-32 overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
