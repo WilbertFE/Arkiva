@@ -14,6 +14,8 @@ import type { User } from "@/lib/types";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { signOut } from "next-auth/react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface TopbarProps {
   title: string;
@@ -26,6 +28,9 @@ export function Topbar({
   onMenuClick,
   user,
 }: TopbarProps) {
+
+
+
   return (
     <header className="sticky top-0 z-40 flex h-[57px] items-center justify-between border-b border-border bg-card px-4 sm:px-6">
       {/* Left — mobile hamburger + page title */}
@@ -90,8 +95,8 @@ export function Topbar({
               <Link href="/settings">Settings</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-[13px] cursor-pointer text-destructive focus:text-destructive">
-              <Button variant="ghost" className="p-0 text-sm cursor-pointer" onClick={() => signOut({ callbackUrl: "/signin" })}>Logout</Button>
+            <DropdownMenuItem onClick={() => signOut({ callbackUrl: "/signin" })} className="text-[13px] cursor-pointer text-destructive focus:text-destructive">
+              Logout
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
