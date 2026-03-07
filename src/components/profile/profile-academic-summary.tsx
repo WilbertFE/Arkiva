@@ -1,5 +1,6 @@
 import { TrendingUp, Award, BookMarked, Percent } from "lucide-react";
 import { summaryStats } from "@/lib/data";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
 const cards = [
   {
@@ -38,41 +39,45 @@ const cards = [
 
 export function ProfileAcademicSummary() {
   return (
-    <div className="rounded-lg border border-border bg-card shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
+    <Card className="shadow-sm">
       {/* Card header */}
-      <div className="border-b border-border px-5 py-4">
-        <h2 className="text-[13px] font-semibold text-foreground">
+      <CardHeader className="pb-4">
+        <CardTitle className="text-base font-semibold text-slate-900">
           Academic Summary
-        </h2>
-        <p className="mt-0.5 text-[12px] text-muted-foreground">
+        </CardTitle>
+        <CardDescription className="text-sm">
           Cumulative performance across all semesters.
-        </p>
-      </div>
+        </CardDescription>
+      </CardHeader>
 
       {/* Stat grid */}
-      <div className="grid grid-cols-1 gap-px bg-border sm:grid-cols-2 lg:grid-cols-4">
-        {cards.map(({ label, value, sub, icon: Icon, iconColor, iconBg }) => (
-          <div key={label} className="flex flex-col gap-3 bg-card p-4">
-            <div className="flex items-center justify-between">
-              <span className="text-[12px] font-medium text-muted-foreground">
-                {label}
-              </span>
-              <span
-                className={`flex h-7 w-7 items-center justify-center rounded-md ${iconBg}`}
-              >
-                <Icon
-                  className={`h-[14px] w-[14px] ${iconColor}`}
-                  aria-hidden="true"
-                />
-              </span>
+      <CardContent className="p-0 sm:p-0">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x lg:divide-y-0 lg:divide-x divide-slate-100">
+          {cards.map(({ label, value, sub, icon: Icon, iconColor, iconBg }) => (
+            <div key={label} className="flex flex-col gap-3 px-6 py-6 transition-colors hover:bg-slate-50/50">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  {label}
+                </span>
+                <span
+                  className={`flex h-10 w-10 items-center justify-center rounded-full ${iconBg}`}
+                >
+                  <Icon
+                    className={`h-4 w-4 ${iconColor}`}
+                    aria-hidden="true"
+                  />
+                </span>
+              </div>
+              <div>
+                <p className="tabular text-2xl font-bold leading-none tracking-tight text-slate-900">
+                  {value}
+                </p>
+                <p className="text-xs text-slate-500 mt-1">{sub}</p>
+              </div>
             </div>
-            <p className="tabular text-[26px] font-semibold leading-none tracking-tight text-foreground">
-              {value}
-            </p>
-            <p className="text-[11px] text-muted-foreground">{sub}</p>
-          </div>
-        ))}
-      </div>
-    </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
   );
 }

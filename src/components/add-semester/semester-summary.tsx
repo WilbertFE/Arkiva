@@ -1,5 +1,6 @@
 import { TrendingUp, Percent, BookOpen } from "lucide-react";
 import type { SubjectEntry } from "@/lib/types";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
 const GRADE_POINTS: Record<string, number> = { A: 4.0, B: 3.0, C: 2.0, D: 1.0, E: 0.0 };
 
@@ -31,34 +32,36 @@ export function SemesterSummary({ subjects }: SemesterSummaryProps) {
   const { gpa, avgScore, total } = calcSummary(subjects);
 
   const stats = [
-    { label: "GPA", value: gpa, icon: TrendingUp, iconColor: "text-primary", iconBg: "bg-primary/8" },
-    { label: "Average Score", value: avgScore !== "—" ? `${avgScore}%` : "—", icon: Percent, iconColor: "text-emerald-600", iconBg: "bg-emerald-500/8" },
-    { label: "Total Subjects", value: String(total), icon: BookOpen, iconColor: "text-sky-500", iconBg: "bg-sky-500/8" },
+    { label: "GPA", value: gpa, icon: TrendingUp, iconColor: "text-blue-600", iconBg: "bg-blue-100" },
+    { label: "Average Score", value: avgScore !== "—" ? `${avgScore}%` : "—", icon: Percent, iconColor: "text-emerald-600", iconBg: "bg-emerald-100" },
+    { label: "Total Subjects", value: String(total), icon: BookOpen, iconColor: "text-sky-600", iconBg: "bg-sky-100" },
   ] as const;
 
   return (
-    <div className="rounded-lg border border-border bg-card shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
-      <div className="border-b border-border px-5 py-4">
-        <h2 className="text-[13px] font-semibold text-foreground">Semester Summary</h2>
-        <p className="mt-0.5 text-[12px] text-muted-foreground">
+    <Card className="shadow-sm">
+      <CardHeader className="pb-4">
+        <CardTitle className="text-base font-semibold text-slate-900">Semester Summary</CardTitle>
+        <CardDescription className="text-sm">
           Calculated from the subjects entered above.
-        </p>
-      </div>
-      <div className="grid grid-cols-3 divide-x divide-border">
-        {stats.map(({ label, value, icon: Icon, iconColor, iconBg }) => (
-          <div key={label} className="flex flex-col items-center gap-2 px-4 py-5 text-center sm:flex-row sm:gap-3 sm:text-left">
-            <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-md ${iconBg}`}>
-              <Icon className={`h-[15px] w-[15px] ${iconColor}`} aria-hidden="true" />
-            </span>
-            <div>
-              <p className="tabular text-[22px] font-semibold leading-none tracking-tight text-foreground">
-                {value}
-              </p>
-              <p className="mt-1 text-[11px] text-muted-foreground">{label}</p>
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="p-0 sm:p-0">
+        <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
+          {stats.map(({ label, value, icon: Icon, iconColor, iconBg }) => (
+            <div key={label} className="flex flex-col items-center gap-3 px-6 py-6 text-center sm:flex-row sm:text-left bg-slate-50/50 first:rounded-tl-b transition-colors hover:bg-slate-50">
+              <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${iconBg}`}>
+                <Icon className={`h-4 w-4 ${iconColor}`} aria-hidden="true" />
+              </span>
+              <div>
+                <p className="tabular text-2xl font-bold leading-none tracking-tight text-slate-900">
+                  {value}
+                </p>
+                <p className="mt-1.5 text-xs font-medium text-slate-500">{label}</p>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
-    </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
   );
 }

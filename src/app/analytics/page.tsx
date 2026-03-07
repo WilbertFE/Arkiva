@@ -10,16 +10,23 @@ import { StudyRecommendations } from "@/components/analytics/StudyRecommendation
 export default function AnalyticsPage() {
   return (
     <DashboardLayout title="Analytics">
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col gap-8 w-full">
         <AnalyticsHeader />
-        <PerformanceSummary />
         
-        <div className="grid gap-6 lg:grid-cols-2 mb-8">
-          <PerformanceTrend />
-          <StudyRecommendations />
-        </div>
-        
+        {/* Top: Insight / Prediction Cards */}
         <PredictionCards />
+
+        {/* Grid split: 2/3 + 1/3 */}
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+          <div className="lg:col-span-2 flex flex-col gap-6">
+            <PerformanceTrend />
+          </div>
+          
+          <div className="flex flex-col gap-6">
+            <PerformanceSummary />
+            <StudyRecommendations />
+          </div>
+        </div>
       </div>
     </DashboardLayout>
   );

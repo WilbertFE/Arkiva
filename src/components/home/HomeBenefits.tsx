@@ -1,5 +1,8 @@
+"use client";
+
 import { Check } from "lucide-react";
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 export function HomeBenefits() {
   const benefits = [
@@ -18,7 +21,12 @@ export function HomeBenefits() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             
             {/* Left Content */}
-            <div>
+            <motion.div
+              initial={{ opacity: 0, x: -40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+            >
               <h2 className="text-base font-semibold leading-7 text-blue-600">Why Use This App</h2>
               <p className="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl mb-6">
                 Take control of your academic journey
@@ -29,22 +37,39 @@ export function HomeBenefits() {
               
               <ul className="space-y-4">
                 {benefits.map((benefit, index) => (
-                  <li key={index} className="flex items-start">
+                  <motion.li 
+                    key={index} 
+                    className="flex items-start"
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: 0.3 + (index * 0.1) }}
+                  >
                     <div className="flex-shrink-0 mt-1">
                       <div className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-100">
                         <Check className="h-4 w-4 text-blue-600" />
                       </div>
                     </div>
                     <span className="ml-4 text-base text-slate-700">{benefit}</span>
-                  </li>
+                  </motion.li>
                 ))}
               </ul>
-            </div>
+            </motion.div>
             
             {/* Right Content / Abstract Illustration */}
-            <div className="relative isolate">
+            <motion.div 
+              className="relative isolate"
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+            >
               <div className="absolute inset-0 -z-10 bg-gradient-to-tr from-blue-100 to-emerald-50 rounded-3xl transform rotate-3 scale-105 blur-lg opacity-50"></div>
-              <div className="bg-white rounded-3xl p-8 shadow-xl ring-1 ring-slate-100 relative">
+              <motion.div 
+                className="bg-white rounded-3xl p-8 shadow-xl ring-1 ring-slate-100 relative"
+                whileHover={{ y: -10 }}
+                transition={{ duration: 0.3 }}
+              >
                 <div className="flex justify-between items-center mb-8">
                   <div>
                     <h3 className="text-lg font-semibold text-slate-900">Current Semester</h3>
@@ -70,7 +95,13 @@ export function HomeBenefits() {
                         <span className="font-semibold text-slate-900">{item.grade}</span>
                       </div>
                       <div className="w-full bg-slate-100 rounded-full h-2.5">
-                        <div className={`${item.color} h-2.5 rounded-full`} style={{ width: `${item.percent}%` }}></div>
+                        <motion.div 
+                          className={`${item.color} h-2.5 rounded-full`} 
+                          initial={{ width: 0 }}
+                          whileInView={{ width: `${item.percent}%` }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 1, delay: 0.5 + (i * 0.1), ease: "easeOut" }}
+                        ></motion.div>
                       </div>
                     </div>
                   ))}
@@ -87,8 +118,8 @@ export function HomeBenefits() {
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
             
           </div>
         </div>

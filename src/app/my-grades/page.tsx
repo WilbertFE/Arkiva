@@ -10,13 +10,17 @@ import { RecentGradesTable } from "@/components/my-grades/RecentGradesTable";
 export default function MyGradesPage() {
   return (
     <DashboardLayout title="My Grades">
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col gap-8 w-full">
         <MyGradesHeader />
         <MyGradesStats />
         
-        <div className="grid gap-6 md:grid-cols-2 mb-8">
-          <SubjectPerformance />
-          <SemesterProgress />
+        <div className="grid gap-6 lg:grid-cols-3">
+          <div className="lg:col-span-2 flex flex-col gap-6">
+            <SubjectPerformance />
+          </div>
+          <div className="flex flex-col gap-6">
+            <SemesterProgress />
+          </div>
         </div>
         
         <RecentGradesTable />

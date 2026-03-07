@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Sun, Moon, Monitor } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
 type Theme = "light" | "dark" | "system";
 
@@ -23,15 +24,15 @@ export function AppearanceSettings() {
   }
 
   return (
-    <div className="rounded-lg border border-border bg-card shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
-      <div className="border-b border-border px-5 py-4">
-        <h2 className="text-[13px] font-semibold text-foreground">Appearance</h2>
-        <p className="mt-0.5 text-[12px] text-muted-foreground">
+    <Card className="shadow-sm">
+      <CardHeader className="pb-4">
+        <CardTitle className="text-base font-semibold text-slate-900">Appearance</CardTitle>
+        <CardDescription className="text-sm">
           Choose how GradeTracker looks to you.
-        </p>
-      </div>
-      <div className="p-5">
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           {THEMES.map(({ value, label, icon: Icon, description }) => {
             const active = theme === value;
             return (
@@ -40,33 +41,35 @@ export function AppearanceSettings() {
                 type="button"
                 onClick={() => { setTheme(value); setSaved(false); }}
                 className={cn(
-                  "flex flex-col gap-2 rounded-md border px-4 py-3.5 text-left transition-colors",
+                  "flex flex-col gap-3 rounded-xl border p-4 text-left transition-all duration-200",
                   active
-                    ? "border-primary bg-primary/5 ring-1 ring-primary/30"
-                    : "border-border hover:border-muted-foreground/30 hover:bg-accent"
+                    ? "border-blue-600 bg-blue-50/50 ring-1 ring-blue-600 shadow-sm"
+                    : "border-slate-200 hover:border-slate-300 hover:bg-slate-50"
                 )}
               >
-                <Icon
-                  className={cn("h-4 w-4", active ? "text-primary" : "text-muted-foreground")}
-                  aria-hidden="true"
-                />
+                <div className={cn(
+                  "flex h-10 w-10 items-center justify-center rounded-lg transition-colors",
+                  active ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-500"
+                )}>
+                  <Icon className="h-5 w-5" aria-hidden="true" />
+                </div>
                 <div>
-                  <p className={cn("text-[13px] font-medium", active ? "text-foreground" : "text-muted-foreground")}>
+                  <p className={cn("text-sm font-semibold", active ? "text-slate-900" : "text-slate-700")}>
                     {label}
                   </p>
-                  <p className="mt-0.5 text-[11px] text-muted-foreground">{description}</p>
+                  <p className="mt-1 text-xs text-slate-500">{description}</p>
                 </div>
               </button>
             );
           })}
         </div>
-        <div className="mt-5 flex items-center gap-3">
-          <Button size="sm" className="text-[12px]" onClick={handleSave}>
+        <div className="mt-6 flex items-center gap-4">
+          <Button className="text-sm bg-blue-600 hover:bg-blue-700 h-10 px-6" onClick={handleSave}>
             Save Preference
           </Button>
-          {saved && <span className="text-[12px] text-[var(--success)]">Preference saved.</span>}
+          {saved && <span className="text-sm font-medium text-emerald-600 transition-opacity animate-in fade-in duration-300">Preference saved successfully.</span>}
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

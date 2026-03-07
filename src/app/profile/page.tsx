@@ -7,29 +7,37 @@ import { profileUser } from "@/lib/data";
 
 export default function ProfilePage() {
   return (
-    <DashboardLayout title="Profile">
-      {/* Page heading */}
-      <div>
-        <h2 className="text-balance text-[15px] font-semibold text-foreground">
-          Your Profile
-        </h2>
-        <p className="mt-0.5 text-[12px] text-muted-foreground leading-relaxed">
-          Manage your personal information, academic record, and account
-          settings.
-        </p>
+    <DashboardLayout title="Your Profile">
+      <div className="flex flex-col gap-8">
+        {/* Page heading */}
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight text-slate-900">
+            Your Profile
+          </h2>
+          <p className="mt-1 text-sm text-slate-500">
+            Manage your personal information, academic record, and account
+            settings.
+          </p>
+        </div>
+
+        {/* Profile header card */}
+        <ProfileHeader user={profileUser} />
+
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          {/* Personal info form */}
+          <div className="flex flex-col gap-6">
+            <PersonalInfoCard user={profileUser} />
+          </div>
+
+          <div className="flex flex-col gap-6">
+            {/* Academic summary */}
+            <ProfileAcademicSummary />
+
+            {/* Account settings */}
+            <AccountSettingsCard user={profileUser} />
+          </div>
+        </div>
       </div>
-
-      {/* Profile header card */}
-      <ProfileHeader user={profileUser} />
-
-      {/* Personal info form */}
-      <PersonalInfoCard user={profileUser} />
-
-      {/* Academic summary */}
-      <ProfileAcademicSummary />
-
-      {/* Account settings */}
-      <AccountSettingsCard user={profileUser} />
     </DashboardLayout>
   );
 }

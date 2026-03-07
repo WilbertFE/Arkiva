@@ -7,36 +7,37 @@ import { currentUser } from "@/lib/data";
 
 export default function DashboardPage() {
   return (
-    <DashboardLayout title="Dashboard">
-      {/* Welcome row */}
-      <div className="flex items-start justify-between gap-4">
+    <DashboardLayout title="Overview">
+      <div className="flex flex-col gap-8">
+        {/* Welcome row */}
         <div>
-          <h2 className="text-balance text-[15px] font-semibold text-foreground">
+          <h2 className="text-2xl font-bold tracking-tight text-slate-900">
             Good morning, {currentUser.name}
           </h2>
-          <p className="mt-0.5 text-[12px] text-muted-foreground leading-relaxed">
+          <p className="mt-1 text-sm text-slate-500">
             {
               "Your GPA has improved every term — you're on track for Dean's List again."
             }
           </p>
         </div>
-      </div>
 
-      {/* KPI cards */}
-      <SummaryCards />
+        {/* KPI cards */}
+        <SummaryCards />
 
-      {/* Chart + snapshot — 3/5 + 2/5 split */}
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
-        <div className="lg:col-span-3">
-          <GpaChart />
+        {/* Main Content & Sidebar */}
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+          {/* Main Column */}
+          <div className="flex flex-col gap-6 lg:col-span-2">
+            <GpaChart />
+            <SemestersTable />
+          </div>
+          
+          {/* Sidebar Column */}
+          <div className="flex flex-col gap-6">
+            <PerformanceSnapshot />
+          </div>
         </div>
-        <div className="lg:col-span-2">
-          <PerformanceSnapshot />
-        </div>
       </div>
-
-      {/* Semester history */}
-      <SemestersTable />
     </DashboardLayout>
   );
 }

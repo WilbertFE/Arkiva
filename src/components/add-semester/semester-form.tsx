@@ -9,6 +9,7 @@ import { SubjectRow } from "@/components/add-semester/subject-row";
 import { SemesterSummary } from "@/components/add-semester/semester-summary";
 import { cn } from "@/lib/utils";
 import type { SemesterInfo as SemesterInfoType, SubjectEntry } from "@/lib/types";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
 function makeSubject(): SubjectEntry {
   return { id: crypto.randomUUID(), name: "", score: "", grade: "", credits: "" };
@@ -70,32 +71,32 @@ export function SemesterForm() {
   const filledCount = subjects.filter((s) => s.name.trim()).length;
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-6 mt-6">
       <SemesterInfo info={info} onChange={handleInfoChange} />
 
       {/* Subjects card */}
-      <div className="rounded-lg border border-border bg-card shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
-        <div className="flex items-center justify-between border-b border-border px-5 py-3.5">
-          <div>
-            <h2 className="text-[13px] font-semibold text-foreground">Subjects &amp; Grades</h2>
-            <p className="mt-0.5 text-[12px] text-muted-foreground">
+      <Card className="shadow-sm">
+        <CardHeader className="flex flex-row items-center justify-between pb-4">
+          <div className="space-y-1">
+            <CardTitle className="text-base font-semibold text-slate-900">Subjects &amp; Grades</CardTitle>
+            <CardDescription className="text-sm">
               {filledCount === 0
                 ? "Add your subjects below."
                 : `${filledCount} of ${subjects.length} subject${subjects.length !== 1 ? "s" : ""} filled in.`}
-            </p>
+            </CardDescription>
           </div>
-          <span className="tabular rounded-full border border-border bg-muted px-2.5 py-0.5 text-[11px] font-medium text-muted-foreground">
-            {subjects.length}
-          </span>
-        </div>
+          <div className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-medium">
+            {subjects.length} Subjects
+          </div>
+        </CardHeader>
 
-        <div className="p-5">
+        <CardContent>
           {/* Column headers — desktop only */}
-          <div className="mb-2 hidden sm:grid sm:grid-cols-[20px_1fr_80px_80px_64px_36px] sm:gap-x-3 sm:px-0">
+          <div className="mb-3 hidden sm:grid sm:grid-cols-[20px_1fr_80px_80px_64px_36px] sm:gap-x-3 sm:px-0">
             {["", "Subject Name", "Score", "Grade", "Credits (SKS)", ""].map((h, i) => (
               <span
                 key={i}
-                className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground"
+                className="text-xs font-semibold uppercase tracking-wider text-slate-500"
               >
                 {h}
               </span>
@@ -103,7 +104,7 @@ export function SemesterForm() {
           </div>
 
           {/* Rows with enter animation */}
-          <div ref={listRef} className="flex flex-col gap-2">
+          <div ref={listRef} className="flex flex-col gap-3">
             {subjects.map((subject, index) => (
               <div
                 key={subject.id}
@@ -128,46 +129,46 @@ export function SemesterForm() {
 
           {/* Empty state hint — shown until at least one subject is filled */}
           {subjects.length === 1 && !subjects[0].name && (
-            <div className="mt-3 flex items-center gap-2 rounded-md border border-dashed border-border bg-muted/40 px-4 py-3 text-[12px] text-muted-foreground">
-              <BookOpen className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+            <div className="mt-4 flex items-center gap-3 rounded-lg border border-dashed border-slate-200 bg-slate-50/50 px-5 py-4 text-sm text-slate-500">
+              <BookOpen className="h-5 w-5 shrink-0 text-slate-400" aria-hidden="true" />
               Start by entering a subject name, then fill in the score — the grade is auto-calculated.
             </div>
           )}
 
           {/* Add row */}
-          <div className="mt-4 flex items-center gap-3">
+          <div className="mt-6 flex items-center gap-4">
             <Button
               type="button"
               variant="outline"
               size="sm"
               onClick={addSubject}
-              className="h-8 gap-1.5 text-[12px]"
+              className="gap-2 text-sm h-9"
             >
-              <Plus className="h-3.5 w-3.5" aria-hidden="true" />
+              <Plus className="h-4 w-4" aria-hidden="true" />
               Add Subject
             </Button>
             {subjects.length >= 5 && (
-              <span className="text-[11px] text-muted-foreground">
-                {subjects.length} subjects added
+              <span className="text-xs text-slate-500">
+                {subjects.length} subjects added so far
               </span>
             )}
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       <SemesterSummary subjects={subjects} />
 
       {/* Actions */}
-      <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+      <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end mt-4">
         <Button
           type="button"
           variant="outline"
-          className="h-9 px-5 text-[13px]"
+          className="h-10 px-6 text-sm"
           onClick={() => router.back()}
         >
           Cancel
         </Button>
-        <Button type="button" className="h-9 px-5 text-[13px]">
+        <Button type="button" className="h-10 px-6 text-sm bg-blue-600 hover:bg-blue-700">
           Save Semester
         </Button>
       </div>

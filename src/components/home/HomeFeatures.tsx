@@ -1,5 +1,8 @@
+"use client";
+
 import { BookOpen, LineChart, Target, Timer } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { motion } from "framer-motion";
 
 const features = [
   {
@@ -34,9 +37,15 @@ const features = [
 
 export function HomeFeatures() {
   return (
-    <section id="features" className="py-24 bg-slate-50 sm:py-32">
+    <section id="features" className="py-24 bg-slate-50 sm:py-32 overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-2xl text-center mb-16">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
+          className="mx-auto max-w-2xl text-center mb-16"
+        >
           <h2 className="text-base font-semibold leading-7 text-blue-600">Features</h2>
           <p className="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
             Everything you need for academic success
@@ -44,24 +53,33 @@ export function HomeFeatures() {
           <p className="mt-6 text-lg leading-8 text-slate-600">
             Our platform provides powerful tools designed to help students analyze performance and stay focused on their educational journey.
           </p>
-        </div>
+        </motion.div>
 
         <div className="mx-auto max-w-5xl">
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-2">
-            {features.map((feature) => (
-              <Card key={feature.name} className="border-none shadow-sm hover:shadow-md transition-shadow">
-                <CardHeader>
-                  <div className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg ${feature.bgColor}`}>
-                    <feature.icon className={`h-6 w-6 ${feature.color}`} aria-hidden="true" />
-                  </div>
-                  <CardTitle className="text-xl">{feature.name}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-base leading-7 text-slate-600">
-                    {feature.description}
-                  </CardDescription>
-                </CardContent>
-              </Card>
+            {features.map((feature, index) => (
+              <motion.div
+                key={feature.name}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{ y: -5, transition: { duration: 0.2 } }}
+              >
+                <Card className="border-none shadow-sm hover:shadow-lg transition-all duration-300 h-full">
+                  <CardHeader>
+                    <div className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg ${feature.bgColor} transform transition-transform duration-300 hover:scale-110`}>
+                      <feature.icon className={`h-6 w-6 ${feature.color}`} aria-hidden="true" />
+                    </div>
+                    <CardTitle className="text-xl">{feature.name}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <CardDescription className="text-base leading-7 text-slate-600">
+                      {feature.description}
+                    </CardDescription>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))}
           </div>
         </div>

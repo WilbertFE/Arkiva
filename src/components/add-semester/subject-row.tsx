@@ -64,37 +64,37 @@ export function SubjectRow({ subject, index, canRemove, onChange, onRemove }: Su
   return (
     <div
       className={cn(
-        "group relative grid grid-cols-1 gap-x-3 gap-y-2 rounded-md border border-border bg-card",
-        "px-3 py-3 transition-shadow duration-150",
-        "sm:grid-cols-[20px_1fr_80px_80px_64px_36px] sm:items-center sm:py-2.5",
-        "hover:shadow-[0_2px_6px_rgba(0,0,0,0.06)]"
+        "group relative grid grid-cols-1 gap-x-3 gap-y-3 rounded-lg border border-slate-200 bg-white",
+        "px-4 py-4 transition-all duration-200",
+        "sm:grid-cols-[20px_1fr_80px_80px_64px_36px] sm:items-center sm:py-3",
+        "hover:border-slate-300 hover:shadow-sm"
       )}
     >
       {/* Drag handle / row number — desktop */}
-      <div className="hidden sm:flex items-center justify-center text-muted-foreground/40 group-hover:text-muted-foreground/70 transition-colors cursor-grab active:cursor-grabbing">
-        <GripVertical className="h-3.5 w-3.5" aria-hidden="true" />
+      <div className="hidden sm:flex items-center justify-center text-slate-300 group-hover:text-slate-500 transition-colors cursor-grab active:cursor-grabbing">
+        <GripVertical className="h-4 w-4" aria-hidden="true" />
       </div>
 
       {/* Mobile row label */}
-      <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground sm:hidden">
+      <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 sm:hidden">
         Subject {index + 1}
       </p>
 
       {/* Subject name */}
-      <div className="flex flex-col gap-1 sm:gap-0">
-        <label className="text-[11px] text-muted-foreground sm:sr-only">Subject Name</label>
+      <div className="flex flex-col gap-1.5 sm:gap-0">
+        <label className="text-xs font-medium text-slate-600 sm:sr-only">Subject Name</label>
         <Input
           value={subject.name}
           onChange={(e) => onChange(subject.id, "name", e.target.value)}
           placeholder="e.g. Mathematics"
-          className="h-8 text-[13px] bg-background"
+          className="text-sm bg-slate-50 border-slate-200 hover:border-slate-300 focus-visible:bg-white transition-colors"
           aria-label={`Subject ${index + 1} name`}
         />
       </div>
 
       {/* Score */}
-      <div className="flex flex-col gap-1 sm:gap-0">
-        <label className="text-[11px] text-muted-foreground sm:sr-only">Score</label>
+      <div className="flex flex-col gap-1.5 sm:gap-0">
+        <label className="text-xs font-medium text-slate-600 sm:sr-only">Score</label>
         <Input
           type="number"
           min={0}
@@ -102,27 +102,27 @@ export function SubjectRow({ subject, index, canRemove, onChange, onRemove }: Su
           value={subject.score}
           onChange={(e) => handleScoreChange(e.target.value)}
           placeholder="0–100"
-          className="h-8 text-[13px] tabular bg-background"
+          className="text-sm tabular-nums bg-slate-50 border-slate-200 hover:border-slate-300 focus-visible:bg-white transition-colors"
           aria-label={`Subject ${index + 1} score`}
         />
       </div>
 
       {/* Grade — auto-derived, still overridable */}
-      <div className="flex flex-col gap-1 sm:gap-0">
-        <label className="text-[11px] text-muted-foreground sm:sr-only">Grade</label>
+      <div className="flex flex-col gap-1.5 sm:gap-0">
+        <label className="text-xs font-medium text-slate-600 sm:sr-only">Grade</label>
         <Select
           value={subject.grade}
           onValueChange={(v) => onChange(subject.id, "grade", v)}
         >
           <SelectTrigger
-            className={cn("h-8 text-[13px] border font-medium transition-colors", gradeColor || "bg-background")}
+            className={cn("text-sm font-semibold transition-colors border-slate-200 hover:border-slate-300", gradeColor || "bg-slate-50 text-slate-500")}
             aria-label={`Subject ${index + 1} grade`}
           >
             <SelectValue placeholder="Grade" />
           </SelectTrigger>
           <SelectContent>
             {GRADES.map((g) => (
-              <SelectItem key={g.value} value={g.value} className="text-[13px] font-mono">
+              <SelectItem key={g.value} value={g.value} className="text-sm font-semibold">
                 {g.label}
               </SelectItem>
             ))}
@@ -131,8 +131,8 @@ export function SubjectRow({ subject, index, canRemove, onChange, onRemove }: Su
       </div>
 
       {/* Credits */}
-      <div className="flex flex-col gap-1 sm:gap-0">
-        <label className="text-[11px] text-muted-foreground sm:sr-only">Credits (SKS)</label>
+      <div className="flex flex-col gap-1.5 sm:gap-0">
+        <label className="text-xs font-medium text-slate-600 sm:sr-only">Credits (SKS)</label>
         <Input
           type="number"
           min={1}
@@ -142,13 +142,13 @@ export function SubjectRow({ subject, index, canRemove, onChange, onRemove }: Su
             onChange(subject.id, "credits", String(Math.min(6, Math.max(1, Number(e.target.value)))))
           }
           placeholder="SKS"
-          className="h-8 text-[13px] tabular bg-background"
+          className="text-sm tabular-nums bg-slate-50 border-slate-200 hover:border-slate-300 focus-visible:bg-white transition-colors"
           aria-label={`Subject ${index + 1} credits`}
         />
       </div>
 
       {/* Remove */}
-      <div className="absolute right-2 top-2 sm:static sm:flex sm:justify-center">
+      <div className="absolute right-3 top-3 sm:static sm:flex sm:justify-center">
         <Button
           type="button"
           variant="ghost"
@@ -156,13 +156,13 @@ export function SubjectRow({ subject, index, canRemove, onChange, onRemove }: Su
           disabled={!canRemove}
           onClick={() => onRemove(subject.id)}
           className={cn(
-            "h-7 w-7 rounded-md text-muted-foreground/50 transition-colors",
-            "hover:bg-destructive/8 hover:text-destructive",
-            "disabled:pointer-events-none disabled:opacity-25"
+            "h-8 w-8 rounded-md text-slate-400 transition-colors",
+            "hover:bg-red-50 hover:text-red-600",
+            "disabled:pointer-events-none disabled:opacity-30"
           )}
           aria-label={`Remove subject ${index + 1}`}
         >
-          <Trash2 className="h-[13px] w-[13px]" aria-hidden="true" />
+          <Trash2 className="h-4 w-4" aria-hidden="true" />
         </Button>
       </div>
     </div>

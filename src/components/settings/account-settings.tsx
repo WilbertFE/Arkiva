@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { profileUser } from "@/lib/data";
 
 export function AccountSettings() {
@@ -41,40 +42,44 @@ export function AccountSettings() {
   ];
 
   return (
-    <div className="rounded-lg border border-border bg-card shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
-      <div className="border-b border-border px-5 py-4">
-        <h2 className="text-[13px] font-semibold text-foreground">Account Settings</h2>
-        <p className="mt-0.5 text-[12px] text-muted-foreground">
+    <Card className="shadow-sm">
+      <CardHeader className="pb-4">
+        <CardTitle className="text-base font-semibold text-slate-900">Account Settings</CardTitle>
+        <CardDescription className="text-sm">
           Update your name and school details.
-        </p>
-      </div>
-      <form onSubmit={handleSave} className="p-5">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {fields.map(({ label, key, type = "text", disabled }) => (
-            <div key={key} className="flex flex-col gap-1.5">
-              <Label htmlFor={`acc-${key}`} className="text-[12px] font-medium text-muted-foreground">
-                {label}
-              </Label>
-              <Input
-                id={`acc-${key}`}
-                type={type}
-                value={values[key]}
-                onChange={handleChange(key)}
-                disabled={disabled}
-                className="h-8 text-[13px] disabled:opacity-50 disabled:cursor-not-allowed"
-              />
-            </div>
-          ))}
-        </div>
-        <div className="mt-5 flex items-center gap-3">
-          <Button type="submit" size="sm" className="text-[12px]">
-            Save Changes
-          </Button>
-          {saved && (
-            <span className="text-[12px] text-[var(--success)]">Changes saved.</span>
-          )}
-        </div>
-      </form>
-    </div>
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSave} className="space-y-6">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            {fields.map(({ label, key, type = "text", disabled }) => (
+              <div key={key} className="flex flex-col gap-2">
+                <Label htmlFor={`acc-${key}`} className="text-sm font-medium text-slate-700">
+                  {label}
+                </Label>
+                <Input
+                  id={`acc-${key}`}
+                  type={type}
+                  value={values[key]}
+                  onChange={handleChange(key)}
+                  disabled={disabled}
+                  className="text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                />
+              </div>
+            ))}
+          </div>
+          <div className="flex items-center gap-4 pt-2">
+            <Button type="submit" className="text-sm bg-blue-600 hover:bg-blue-700 h-10 px-6">
+              Save Changes
+            </Button>
+            {saved && (
+              <span className="text-sm font-medium text-emerald-600 transition-opacity animate-in fade-in duration-300">
+                Changes saved successfully.
+              </span>
+            )}
+          </div>
+        </form>
+      </CardContent>
+    </Card>
   );
 }

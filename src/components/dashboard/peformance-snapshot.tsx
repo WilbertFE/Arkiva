@@ -1,5 +1,6 @@
 import { performanceStats } from "@/lib/data";
 import type { PerformanceStat } from "@/lib/types";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
 interface PerformanceSnapshotProps {
   stats?: PerformanceStat[];
@@ -9,34 +10,26 @@ export function PerformanceSnapshot({
   stats = performanceStats,
 }: PerformanceSnapshotProps) {
   return (
-    <div className="flex h-full flex-col rounded-lg border border-border bg-card shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
-      {/* Header */}
-      <div className="border-b border-border px-5 py-4">
-        <p className="text-[13px] font-semibold text-foreground">Performance</p>
-        <p className="mt-0.5 text-[11px] text-muted-foreground">
-          Key highlights this term
-        </p>
-      </div>
-
-      {/* Rows */}
-      <ul className="flex flex-1 flex-col divide-y divide-border">
-        {stats.map(({ label, value, sub }) => (
-          <li
-            key={label}
-            className="flex items-center justify-between gap-4 px-5 py-3.5"
-          >
-            <div className="min-w-0">
-              <p className="truncate text-[12px] font-medium text-foreground">
-                {label}
-              </p>
-              <p className="text-[11px] text-muted-foreground">{sub}</p>
+    <Card className="shadow-sm h-full">
+      <CardHeader>
+        <CardTitle className="text-base font-semibold text-slate-900">Performance Snapshot</CardTitle>
+        <CardDescription className="text-sm">Key highlights this term</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-6">
+          {stats.map(({ label, value, sub }) => (
+            <div key={label} className="flex justify-between items-center">
+              <div>
+                <p className="text-sm font-medium text-slate-700">{label}</p>
+                <p className="text-xs text-slate-500">{sub}</p>
+              </div>
+              <div className="text-lg font-semibold text-slate-900">
+                {value}
+              </div>
             </div>
-            <span className="tabular shrink-0 text-[13px] font-semibold text-primary">
-              {value}
-            </span>
-          </li>
-        ))}
-      </ul>
-    </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
   );
 }
