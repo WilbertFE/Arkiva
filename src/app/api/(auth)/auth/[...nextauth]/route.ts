@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { getUserByEmail } from "@/lib/db";
 import supabase from "@/lib/supabase";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -27,7 +27,7 @@ const handler = NextAuth({
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials): Promise<any> {
+      async authorize(credentials: any): Promise<any> {
         if (!credentials?.email || !credentials?.password) {
           console.error("Credentials not provided");
           return null;
@@ -43,21 +43,31 @@ const handler = NextAuth({
         const email = parsed.data.email;
         const password = parsed.data.password;
 
-        const { data, error } = await supabase
+        const { data: dbUser, error } = await supabase
           .from("users")
-          .select("password, username, email, role, full_name, created_at, updated_at")
+          .select("uuid, password, username, email, role, full_name, school, class, avatar_url, created_at, updated_at")
           .eq("email", email)
           .maybeSingle();
 
-        if (error || !data) {
+        if (error || !dbUser) {
           console.error("Invalid credentials");
           return null;
         }
 
-        const isPasswordValid = await bcrypt.compare(password, data.password);
+        const isPasswordValid = await bcrypt.compare(password, dbUser.password);
         if (isPasswordValid) {
-          const { username, email, role, full_name, created_at, updated_at } = data;
-          return { username, email, role, full_name, created_at, updated_at };
+          return {
+            id: dbUser.uuid,
+            username: dbUser.username,
+            email: dbUser.email,
+            role: dbUser.role,
+            full_name: dbUser.full_name,
+            school: dbUser.school,
+            class: dbUser.class,
+            avatar_url: dbUser.avatar_url,
+            created_at: dbUser.created_at,
+            updated_at: dbUser.updated_at
+          };
         } else {
           console.error("Invalid credentials");
           return null;
@@ -76,17 +86,17 @@ const handler = NextAuth({
 
         if (!email) return false;
 
-        const { data: existingUser } = await supabase
-          .from("users")
-          .select("role, username, full_name, email, created_at, updated_at")
-          .eq("email", email)
-          .maybeSingle();
+        const { data: existingUser } = await getUserByEmail(email);
 
         if (existingUser) {
+          user.id = existingUser.id;
           user.role = existingUser.role;
           user.username = existingUser.username;
           user.full_name = existingUser.full_name;
           user.email = existingUser.email;
+          user.school = existingUser.school;
+          user.class = existingUser.class;
+          user.avatar_url = existingUser.avatar_url;
           user.created_at = existingUser.created_at;
           user.updated_at = existingUser.updated_at;
         } else {
@@ -112,10 +122,14 @@ const handler = NextAuth({
             console.error(error);
             return false;
           }
+          user.id = newUserData.uuid;
           user.role = newUserData.role;
           user.username = newUserData.username;
           user.full_name = newUserData.full_name;
           user.email = newUserData.email;
+          user.school = newUserData.school;
+          user.class = newUserData.class;
+          user.avatar_url = newUserData.avatar_url;
           user.created_at = newUserData.created_at;
           user.updated_at = newUserData.updated_at;
         }
@@ -139,40 +153,47 @@ const handler = NextAuth({
       return false;
     },
 
-    async jwt({ token, user }: any) {
+    async jwt({ token, user, trigger, session }: any) {
       if (user) {
+        token.id = user.id;
         token.role = user.role;
         token.email = user.email;
         token.username = user.username;
         token.full_name = user.full_name;
+        token.school = user.school;
+        token.class = user.class;
+        token.avatar_url = user.avatar_url;
         token.created_at = user.created_at;
         token.updated_at = user.updated_at;
       }
+
+      // Handle session updates (client-side update() call)
+      if (trigger === "update" && session?.user?.email) {
+        const { data: freshUser } = await getUserByEmail(session.user.email);
+        if (freshUser) {
+          token.full_name = freshUser.full_name;
+          token.username = freshUser.username;
+          token.school = freshUser.school;
+          token.class = freshUser.class;
+          token.avatar_url = freshUser.avatar_url;
+          token.updated_at = freshUser.updated_at;
+        }
+      }
+
       return token;
     },
     async session({ session, token }: any) {
-      if ("username" in token) {
+      if (session.user) {
+        session.user.id = token.id;
         session.user.username = token.username;
-      }
-
-      if ("role" in token) {
         session.user.role = token.role;
-      }
-
-      if ("created_at" in token) {
         session.user.created_at = token.created_at;
-      }
-
-      if ("updated_at" in token) {
         session.user.updated_at = token.updated_at;
-      }
-
-      if ("email" in token) {
         session.user.email = token.email;
-      }
-
-      if ("full_name" in token) {
         session.user.full_name = token.full_name;
+        session.user.school = token.school;
+        session.user.class = token.class;
+        session.user.avatar_url = token.avatar_url;
       }
 
       return session;

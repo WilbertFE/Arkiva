@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -23,6 +23,9 @@ export function ProfileHeader({ user }: { user: User }) {
         {/* Avatar + info */}
         <div className="flex items-center gap-5">
           <Avatar className="h-16 w-16 shrink-0 ring-4 ring-slate-50">
+            {user.avatar_url && (
+              <AvatarImage src={user.avatar_url} alt={user.full_name} className="object-cover" />
+            )}
             <AvatarFallback className="bg-blue-600 text-white text-lg font-bold">
               {initials}
             </AvatarFallback>

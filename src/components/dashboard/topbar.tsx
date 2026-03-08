@@ -1,7 +1,7 @@
 "use client";
 
 import { Bell, Menu, ChevronDown } from "lucide-react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -67,6 +67,7 @@ export function Topbar({
               aria-label={`User menu for ${user.full_name}`}
             >
               <Avatar className="h-[22px] w-[22px]">
+                <AvatarImage src={user.avatar_url} alt={user.full_name} />
                 <AvatarFallback className="bg-primary text-primary-foreground text-[9px] font-bold">
                   {user.initials}
                 </AvatarFallback>

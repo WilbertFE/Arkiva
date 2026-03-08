@@ -12,10 +12,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { updateUserProfile } from "@/lib/db";
+import { Loader2 } from "lucide-react";
+import { useSession } from "next-auth/react";
 import type { User } from "@/lib/types";
 
 
 export function PersonalInfoCard({ user }: { user: User }) {
+  const { update } = useSession();
 
   const [values, setValues] = useState({
     fullName: user.full_name,
@@ -24,18 +28,46 @@ export function PersonalInfoCard({ user }: { user: User }) {
   });
 
   const [saved, setSaved] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   function handleChange(key: keyof typeof values) {
     return (e: React.ChangeEvent<HTMLInputElement> | string) => {
       const value = typeof e === "string" ? e : e.target.value;
       setValues((v) => ({ ...v, [key]: value }));
       setSaved(false);
+      setError(null);
     };
   }
 
-  function handleSave(e: React.FormEvent) {
+  async function handleSave(e: React.FormEvent) {
     e.preventDefault();
-    setSaved(true);
+    setIsLoading(true);
+    setError(null);
+    setSaved(false);
+
+    const { error: updateError } = await updateUserProfile(user.email, {
+      full_name: values.fullName,
+      school: values.school,
+      class: values.gradeClass,
+    });
+
+    if (updateError) {
+      setError("Failed to update profile. Please try again.");
+    } else {
+      // Trigger NextAuth session update
+      await update({
+        user: {
+          ...user,
+          full_name: values.fullName,
+          school: values.school,
+          class: values.gradeClass,
+        }
+      });
+      setSaved(true);
+    }
+    
+    setIsLoading(false);
   }
 
   const fields: { label: string; key: keyof typeof values; type?: string }[] = [
@@ -80,6 +112,7 @@ export function PersonalInfoCard({ user }: { user: User }) {
                   <Select
                     value={values[key]}
                     onValueChange={handleChange(key)}
+                    disabled={isLoading}
                   >
                     <SelectTrigger id={`field-${key}`} className="text-sm">
                       <SelectValue placeholder="Select your grade" />
@@ -98,6 +131,7 @@ export function PersonalInfoCard({ user }: { user: User }) {
                     type={type}
                     value={values[key]}
                     onChange={handleChange(key) as React.ChangeEventHandler<HTMLInputElement>}
+                    disabled={isLoading}
                     className="text-sm"
                   />
                 )}
@@ -105,14 +139,26 @@ export function PersonalInfoCard({ user }: { user: User }) {
             ))}
           </div>
 
-          <div className="flex items-center gap-4 pt-2">
-            <Button type="submit" className="text-sm bg-blue-600 hover:bg-blue-700 h-10 px-6">
-              Save Changes
-            </Button>
-            {saved && (
-              <span className="text-sm font-medium text-emerald-600 transition-opacity animate-in fade-in duration-300">
-                Changes saved successfully.
-              </span>
+          <div className="flex flex-col gap-3 pt-2">
+            <div className="flex items-center gap-4">
+              <Button 
+                type="submit" 
+                disabled={isLoading}
+                className="text-sm bg-blue-600 hover:bg-blue-700 h-10 px-6"
+              >
+                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Save Changes
+              </Button>
+              {saved && (
+                <span className="text-sm font-medium text-emerald-600 transition-opacity animate-in fade-in duration-300">
+                  Changes saved successfully.
+                </span>
+              )}
+            </div>
+            {error && (
+              <p className="text-sm font-medium text-red-600 mt-1">
+                {error}
+              </p>
             )}
           </div>
         </form>
