@@ -9,6 +9,7 @@ import type {
 // ─── Student ──────────────────────────────────────────────────────────────────
 
 export const currentUser: User = {
+  id: "",
   full_name: "Wilbert",
   email: "wilbert@student.com",
   initials: "WI",
@@ -19,6 +20,8 @@ export const currentUser: User = {
 };
 
 export const profileUser: ProfileUser = {
+  id: "",
+  avatarUrl: "",
   name: "Wilbert",
   fullName: "Wilbert Bernardi",
   email: "wilbert@student.com",

@@ -86,6 +86,7 @@ export interface DetailedSemester {
 }
 
 export interface ProfileUser extends User {
+  avatarUrl?: string;
   name?: string;
   fullName: string;
   studentId: string;
