@@ -63,7 +63,7 @@ export default function SignInPage() {
 
   const handleGoogle = async () => {
     setIsLoading(true);
-    const result = await signIn("google", { callbackUrl: "/" });
+    const result = await signIn("google", { callbackUrl: "/dashboard" });
 
     if (!result?.ok) {
       toast.error("Terjadi kesalahan.");
