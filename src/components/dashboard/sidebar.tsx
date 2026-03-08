@@ -21,6 +21,7 @@ import {
   SheetDescription,
 } from "@/components/ui/sheet";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { signOut } from "next-auth/react";
 
 // ─── Nav config ───────────────────────────────────────────────────────────────
 
@@ -115,7 +116,7 @@ function SidebarContent() {
 
       {/* Logout footer */}
       <div className="shrink-0 border-t border-sidebar-border px-2 py-2">
-        <button className="group flex w-full items-center gap-2.5 rounded-md px-2.5 py-1.75 text-[13px] text-sidebar-foreground/55 transition-colors hover:bg-sidebar-accent/70 hover:text-sidebar-foreground">
+        <button onClick={() => signOut({ callbackUrl: "/signin" })} className="group flex w-full items-center gap-2.5 rounded-md px-2.5 py-1.75 text-[13px] text-sidebar-foreground/55 transition-colors hover:bg-sidebar-accent/70 hover:text-sidebar-foreground">
           <LogOut
             className="h-3.75 w-3.75 shrink-0 text-sidebar-foreground/40 group-hover:text-sidebar-foreground/70"
             aria-hidden="true"
