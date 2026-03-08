@@ -45,7 +45,7 @@ const handler = NextAuth({
 
         const { data, error } = await supabase
           .from("users")
-          .select("password, username, email, role, full_name")
+          .select("password, username, email, role, full_name, created_at, updated_at")
           .eq("email", email)
           .maybeSingle();
 
@@ -56,8 +56,8 @@ const handler = NextAuth({
 
         const isPasswordValid = await bcrypt.compare(password, data.password);
         if (isPasswordValid) {
-          const { username, email, role, full_name } = data;
-          return { username, email, role, full_name };
+          const { username, email, role, full_name, created_at, updated_at } = data;
+          return { username, email, role, full_name, created_at, updated_at };
         } else {
           console.error("Invalid credentials");
           return null;
@@ -78,14 +78,17 @@ const handler = NextAuth({
 
         const { data: existingUser } = await supabase
           .from("users")
-          .select("role, username, full_name, email")
+          .select("role, username, full_name, email, created_at, updated_at")
           .eq("email", email)
           .maybeSingle();
+
         if (existingUser) {
           user.role = existingUser.role;
           user.username = existingUser.username;
           user.full_name = existingUser.full_name;
           user.email = existingUser.email;
+          user.created_at = existingUser.created_at;
+          user.updated_at = existingUser.updated_at;
         } else {
           // sign up
           const uuid = uuidv4();
@@ -113,6 +116,8 @@ const handler = NextAuth({
           user.username = newUserData.username;
           user.full_name = newUserData.full_name;
           user.email = newUserData.email;
+          user.created_at = newUserData.created_at;
+          user.updated_at = newUserData.updated_at;
         }
 
         return true;
@@ -140,6 +145,8 @@ const handler = NextAuth({
         token.email = user.email;
         token.username = user.username;
         token.full_name = user.full_name;
+        token.created_at = user.created_at;
+        token.updated_at = user.updated_at;
       }
       return token;
     },
@@ -150,6 +157,14 @@ const handler = NextAuth({
 
       if ("role" in token) {
         session.user.role = token.role;
+      }
+
+      if ("created_at" in token) {
+        session.user.created_at = token.created_at;
+      }
+
+      if ("updated_at" in token) {
+        session.user.updated_at = token.updated_at;
       }
 
       if ("email" in token) {

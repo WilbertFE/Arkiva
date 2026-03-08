@@ -54,9 +54,12 @@ export interface User {
   full_name: string;
   email: string;
   username: string;
+  created_at: string;
   role: string;
-
+  school?: string;
+  class?: string;
   initials: string;
+  updated_at: string;
 }
 
 export interface GradeSubject {

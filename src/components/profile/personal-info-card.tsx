@@ -5,26 +5,30 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import type { ProfileUser } from "@/lib/types";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import type { User } from "@/lib/types";
 
-interface PersonalInfoCardProps {
-  user: ProfileUser;
-}
 
-export function PersonalInfoCard({ user }: PersonalInfoCardProps) {
+export function PersonalInfoCard({ user }: { user: User }) {
+
   const [values, setValues] = useState({
-    fullName: user.fullName,
-    email: user.email,
-    studentId: user.studentId,
-    school: user.school,
-    gradeClass: user.gradeClass,
+    fullName: user.full_name,
+    school: user.school || "",
+    gradeClass: user.class || "",
   });
 
   const [saved, setSaved] = useState(false);
 
   function handleChange(key: keyof typeof values) {
-    return (e: React.ChangeEvent<HTMLInputElement>) => {
-      setValues((v) => ({ ...v, [key]: e.target.value }));
+    return (e: React.ChangeEvent<HTMLInputElement> | string) => {
+      const value = typeof e === "string" ? e : e.target.value;
+      setValues((v) => ({ ...v, [key]: value }));
       setSaved(false);
     };
   }
@@ -36,10 +40,16 @@ export function PersonalInfoCard({ user }: PersonalInfoCardProps) {
 
   const fields: { label: string; key: keyof typeof values; type?: string }[] = [
     { label: "Full Name", key: "fullName" },
-    { label: "Email", key: "email", type: "email" },
-    { label: "Student ID", key: "studentId" },
     { label: "School Name", key: "school" },
     { label: "Grade / Class", key: "gradeClass" },
+  ];
+
+  const gradeOptions = [
+    "Grade 10",
+    "Grade 11 MIPA",
+    "Grade 11 IPS",
+    "Grade 12 MIPA",
+    "Grade 12 IPS",
   ];
 
   return (
@@ -50,7 +60,7 @@ export function PersonalInfoCard({ user }: PersonalInfoCardProps) {
           Personal Information
         </CardTitle>
         <CardDescription className="text-sm">
-          Update your name, email, and school details.
+          Update your name, and school details.
         </CardDescription>
       </CardHeader>
 
@@ -66,13 +76,31 @@ export function PersonalInfoCard({ user }: PersonalInfoCardProps) {
                 >
                   {label}
                 </Label>
-                <Input
-                  id={`field-${key}`}
-                  type={type}
-                  value={values[key]}
-                  onChange={handleChange(key)}
-                  className="text-sm"
-                />
+                {key === "gradeClass" ? (
+                  <Select
+                    value={values[key]}
+                    onValueChange={handleChange(key)}
+                  >
+                    <SelectTrigger id={`field-${key}`} className="text-sm">
+                      <SelectValue placeholder="Select your grade" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {gradeOptions.map((option) => (
+                        <SelectItem key={option} value={option}>
+                          {option}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  <Input
+                    id={`field-${key}`}
+                    type={type}
+                    value={values[key]}
+                    onChange={handleChange(key) as React.ChangeEventHandler<HTMLInputElement>}
+                    className="text-sm"
+                  />
+                )}
               </div>
             ))}
           </div>

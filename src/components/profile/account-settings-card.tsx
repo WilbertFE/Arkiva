@@ -1,55 +1,58 @@
 import { Button } from "@/components/ui/button";
 import { ShieldCheck, ShieldAlert, LogOut, KeyRound } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import type { ProfileUser } from "@/lib/types";
+import type { ProfileUser, User } from "@/lib/types";
+import { signOut } from "next-auth/react";
 
-interface AccountSettingsCardProps {
-  user: ProfileUser;
-}
 
-export function AccountSettingsCard({ user }: AccountSettingsCardProps) {
+export function AccountSettingsCard({ user }: { user: User }) {
+  const date = new Date(user.created_at);
+  const updatedDate = new Date(user.updated_at);
+
+  const formatted = new Date(date).toLocaleDateString("id-ID", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+
+  const formattedUpdated = new Date(updatedDate).toLocaleDateString("id-ID", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+
   const rows: {
     label: string;
     value: React.ReactNode;
     action?: React.ReactNode;
   }[] = [
-    {
-      label: "Password",
-      value: (
-        <span className="text-[13px] text-muted-foreground">
-          Last changed —
-        </span>
-      ),
-      action: (
-        <Button variant="outline" size="sm" className="gap-1.5 text-[12px]">
-          <KeyRound className="h-3 w-3" aria-hidden="true" />
-          Change Password
-        </Button>
-      ),
-    },
-    {
-      label: "Email verification",
-      value: user.emailVerified ? (
-        <span className="inline-flex items-center gap-1.5 text-[12px] font-medium text-[var(--success)]">
-          <ShieldCheck className="h-3.5 w-3.5" aria-hidden="true" />
-          Verified
-        </span>
-      ) : (
-        <span className="inline-flex items-center gap-1.5 text-[12px] font-medium text-destructive">
-          <ShieldAlert className="h-3.5 w-3.5" aria-hidden="true" />
-          Not verified
-        </span>
-      ),
-    },
-    {
-      label: "Account created",
-      value: (
-        <span className="text-[13px] text-foreground">
-          {user.accountCreated}
-        </span>
-      ),
-    },
-  ];
+      {
+        label: "Password",
+        value: (
+          <span className="text-[13px] text-muted-foreground">
+            Last changed {formattedUpdated}
+          </span>
+        ),
+
+      },
+      {
+        label: "Email verification",
+        value: (
+          <span className="inline-flex items-center gap-1.5 text-[12px] font-medium text-[var(--success)]">
+            <ShieldCheck className="h-3.5 w-3.5" aria-hidden="true" />
+            Verified
+          </span>
+        ),
+      },
+      {
+        label: "Account created",
+        value: (
+          <span className="text-[13px] text-foreground">
+            {formatted}
+          </span>
+        ),
+      },
+    ];
 
   return (
     <Card className="shadow-sm">
@@ -59,7 +62,7 @@ export function AccountSettingsCard({ user }: AccountSettingsCardProps) {
           Account Settings
         </CardTitle>
         <CardDescription className="text-sm">
-          Manage your password, verification, and session.
+          Manage your password, verification, and account info.
         </CardDescription>
       </CardHeader>
 
@@ -92,8 +95,9 @@ export function AccountSettingsCard({ user }: AccountSettingsCardProps) {
               </p>
             </div>
             <Button
+              onClick={() => signOut({ callbackUrl: "/signin" })}
               variant="destructive"
-              className="mt-3 gap-2 text-sm sm:mt-0"
+              className="mt-3 gap-2 text-sm sm:mt-0 cursor-pointer"
             >
               <LogOut className="h-4 w-4" aria-hidden="true" />
               Log out

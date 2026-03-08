@@ -13,6 +13,8 @@ export const currentUser: User = {
   email: "wilbert@student.com",
   initials: "WI",
   username: "",
+  created_at: "",
+  updated_at: "",
   role: ""
 };
 
@@ -28,6 +30,8 @@ export const profileUser: ProfileUser = {
   accountCreated: "January 12, 2024",
   full_name: "",
   username: "",
+  created_at: "",
+  updated_at: "",
   role: ""
 };
 
